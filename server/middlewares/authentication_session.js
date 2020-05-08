@@ -10,7 +10,7 @@ let authSession = (req, res, next) => {
 let excludeSession = (req, res, next) => {
     
     if(req.session.user){
-        res.redirect('/home');
+        return res.redirect('/home');
     }
 
     next();

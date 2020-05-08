@@ -15,7 +15,7 @@ app.get('/api/v1/users', authToken, (req, res) => {
             });
         }
 
-        User.count({ status: true }, (err, count) => {
+        User.countDocuments({ status: true }, (err, count) => {
             return res.json({
                 ok: true,
                 users,

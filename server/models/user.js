@@ -28,6 +28,11 @@ let userSchema = new Schema({
     status: {
         type: Boolean,
         default: true
+    },
+
+    idSession: {
+        type: String,
+        required: false,
     }
 });
 

@@ -7,6 +7,17 @@
     <title>{{ title }}</title>
 </head>
 <body>
+
+    {{#if session.user }}
+
+        <form action="/logout?_method=DELETE" method="POST" id="logout_session">
+            <button type="submit" > Cerrar secion </button>
+        </form>
+
+        <b> {{ session.user.email }} </b>
+
+    {{/if}}
+
     {{{ body }}}
 
     <script src="js/bundle.js"></script>

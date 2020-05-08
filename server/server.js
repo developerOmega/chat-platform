@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const methodOverride = require('method-override')
 const socketIO = require('socket.io');
 const session = require('express-session');
 const mongoStore = require('connect-mongo')(session);
@@ -16,6 +17,9 @@ require('./config/config');
 
 const publicPath = path.resolve(__dirname, '../public');
 app.use(express.static(publicPath));
+
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -43,7 +47,7 @@ app.use(require('./routes/api/v1/users'));
 app.use(require('./routes/api/v1/user_authenticate'));
 
 mongoose.connect(process.env.URLDB, 
-    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: true, useFindAndModify: true }, 
+    { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false }, 
     ( err, res ) => {
         if(err){
             throw new Error(err);
@@ -53,9 +57,12 @@ mongoose.connect(process.env.URLDB,
         }
     });
 
+module.exports.io = socketIO(server);
+require('./sockets/socket');
+
 server.listen(process.env.PORT, () => {
     console.log('Conectado al puerto', process.env.PORT);
 });
 
-module.exports.io = socketIO(server);
+
 

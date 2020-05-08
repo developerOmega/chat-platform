@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
-const { excludeSession } = require('../middlewares/authentication_session');
+const { excludeSession, authSession } = require('../middlewares/authentication_session');
 
 const User = require('../models/user');
 
@@ -22,8 +22,8 @@ app.post('/login', (req, res) => {
         }
 
         if(userDB == null){
+            console.log('No existe el usuario');
             return res.redirect('back');
-
         }
 
         if( !bcrypt.compareSync( body.password, userDB.password ) ){
@@ -41,9 +41,10 @@ app.delete('/logout', function (req, res) {
     res.redirect('/');
 });
 
-app.get('/home', (req ,res) => {
+app.get('/home', authSession, (req ,res) => {
     res.render('home', {
-        title: 'Home'
+        title: 'Home',
+        session: req.session
     })
 });
 
