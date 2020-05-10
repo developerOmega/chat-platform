@@ -42,10 +42,19 @@ app.delete('/logout', function (req, res) {
 });
 
 app.get('/home', authSession, (req ,res) => {
-    res.render('home', {
-        title: 'Home',
-        session: req.session
-    })
+    User.find({status: true}).exec((err, usersDB) => {
+
+        if(err){
+            throw new Error(err);
+        }
+
+        res.render('home', {
+            title: 'Home',
+            session: req.session,
+            users: usersDB
+        })
+    });
+    
 });
 
 module.exports = app;

@@ -19,7 +19,10 @@ class UserGetAllExecute extends UserExecute {
                 console.error(err);
             }
 
-            // console.log(users);
+            // let contentUsers = document.querySelector('#content_users');
+            // users.users.forEach( user => {
+            //     contentUsers.innerHTML += `<button id= '${ user.idSession }' >${ user.email }</button>`
+            // });
         });
     }
 }

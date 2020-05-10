@@ -46,6 +46,7 @@ app.use(require('./routes/routes'));
 app.use(require('./routes/api/v1/users'));
 app.use(require('./routes/api/v1/user_authenticate'));
 
+
 mongoose.connect(process.env.URLDB, 
     { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false }, 
     ( err, res ) => {
@@ -59,6 +60,7 @@ mongoose.connect(process.env.URLDB,
 
 module.exports.io = socketIO(server);
 require('./sockets/socket');
+    
 
 server.listen(process.env.PORT, () => {
     console.log('Conectado al puerto', process.env.PORT);

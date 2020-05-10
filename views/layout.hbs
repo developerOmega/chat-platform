@@ -21,5 +21,15 @@
     {{{ body }}}
 
     <script src="js/bundle.js"></script>
+
+    {{#if session.user }}
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="js/socket-functions.js" ></script>
+        <script src="js/socket-execute.js" ></script>
+        <script src="js/socket-events.js" ></script>
+
+    {{/if}}
+
 </body>
 </html>

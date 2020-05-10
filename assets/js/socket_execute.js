@@ -5,7 +5,7 @@ let socket = io();
 export default class SocketExecute extends Execute {
     constructor(pathname){
         super(pathname);
-        this.socket = io();
+        // this.socket = io();
     }
 
     execute(){
@@ -13,7 +13,7 @@ export default class SocketExecute extends Execute {
             console.log('El cliente esta conectado');
             
             socket.emit('activeChat', this.userAuth, (data) => {
-                console.log(data);
+                console.log('usuario AAsssA', data);
             })
         
         });
@@ -22,13 +22,29 @@ export default class SocketExecute extends Execute {
             console.log('Administrador:', data);
         });
 
-        socket.emit('sendMessage', { data: this.userAuth.name, message: 'Hola amigos' });
+        socket.on('createMessage', data => {
+            console.log(data);
+        })
 
-        // socket.emmit('messagePrivate', { data: this.userAuth, message: "Hola prra" });
+        socket.on('UsersList', data => {
+            let contentUsers = document.querySelector('#content_users');
+            contentUsers.innerHTML = '';
+            console.log(data);
+
+            data.forEach( user => {
+                contentUsers.innerHTML += `<button id= '${ user.idSession }' >${ user.email }</button>`
+            });
+        });
 
         socket.on('disconnect', () => {
             console.log('El servidor se callo');
-        })
+        });
+
+        socket.emit('sendMessage', { data: this.userAuth.name, message: 'Hola amigos' });
+
+        // socket.emit('messagePrivate', { id: "6FVgAqZnp_ACfVZSAAAC" , message: "Hola prra" });
+
+       
 
     }
 }
