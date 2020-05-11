@@ -1,5 +1,6 @@
 const { io } = require('../server');
 const User = require('../models/user');
+const Group = require('../models/group');
 
 io.on('connection', ( client ) => {
 
@@ -23,6 +24,38 @@ io.on('connection', ( client ) => {
                 
             });
         } );
+    });
+
+    client.on('createGroupChat', (data, callback) => {
+        let group = new Group({
+            name: data.name
+        });
+
+        client.join(data.name);
+
+        group.save( (err, groupDB) => {
+            if(err){
+                throw new Error(err);
+            }
+
+            let body = {
+                $push: {
+                    users: {
+                        $each: data.users
+                    }
+                }
+            }
+
+            Group.findByIdAndUpdate( groupDB.id, body, {new: true, runValidators: true}, ( err, groupDB ) => {
+                if(err){
+                    throw new Error(err);
+                }
+
+
+            });
+        } );
+
+
     })
 
     client.on('renderChat', (data, callback) => {

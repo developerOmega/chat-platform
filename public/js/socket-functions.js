@@ -93,4 +93,26 @@ function SocketEvent(){
         });
 
     }
+
+    this.eventCreateGroupChat = function(form){
+
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+            
+            var userArr = [];
+        
+            for(var user of this.user){
+        
+                if( user.checked ){
+                    userArr.push(user.value);
+                }
+        
+            }
+        
+            socket.emit('createGroupChat', { name: this.name.value, users: userArr }, function(data){
+                console.log(data);
+            });
+        })
+
+    }
 }

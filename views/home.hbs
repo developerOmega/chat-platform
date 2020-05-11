@@ -1,7 +1,17 @@
 <h1>Bienvenido al home</h1>
 
+<form id="contentGroupForm">
+    <input type="text" name="name" placeholder="Nombre del grupo">
+
+    {{#each users }}
+        <label for="{{id}}"> {{name}} </label>
+        <input type="checkbox" id="{{id}}" value="{{id}}" name="user">
+    {{/each}}
+
+    <button type="submit" >Crear</button>
+
+</form>
+
 <div id="content_users"></div>
-
-
 <div id="content_chats"></div>
 

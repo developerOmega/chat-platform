@@ -27,12 +27,17 @@ let userSchema = new Schema({
 
     status: {
         type: Boolean,
-        default: true
+        default: false
     },
 
     idSession: {
         type: String,
         required: false,
+    },
+
+    groups: {
+        type: [Schema.ObjectId],
+        ref: 'Group'
     }
 });
 

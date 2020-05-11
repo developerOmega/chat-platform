@@ -45,6 +45,7 @@ app.use( session({
 app.use(require('./routes/routes'));
 app.use(require('./routes/api/v1/users'));
 app.use(require('./routes/api/v1/user_authenticate'));
+app.use(require('./routes/api/v1/groups'));
 
 
 mongoose.connect(process.env.URLDB, 
