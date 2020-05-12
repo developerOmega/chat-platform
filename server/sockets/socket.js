@@ -6,6 +6,7 @@ io.on('connection', ( client ) => {
 
     console.log('El servidor esta conectado')
 
+    //Activar usuarios
     client.on('activeUser', (data, callback) => {
         let id = data._id;
 
@@ -26,9 +27,11 @@ io.on('connection', ( client ) => {
         } );
     });
 
-    client.on('createGroupChat', (data, callback) => {
+    //Crear chat de grupo y guardarlo en base de datos
+    client.on('renderGroupChat', (data, callback) => {
         let group = new Group({
-            name: data.name
+            name: data.name,
+            users: data.users
         });
 
         client.join(data.name);
@@ -38,38 +41,46 @@ io.on('connection', ( client ) => {
                 throw new Error(err);
             }
 
-            let body = {
-                $push: {
-                    users: {
-                        $each: data.users
-                    }
-                }
-            }
+            User.populate(groupDB, {path: 'users'}, (err, groupDB) => {
 
-            Group.findByIdAndUpdate( groupDB.id, body, {new: true, runValidators: true}, ( err, groupDB ) => {
-                if(err){
-                    throw new Error(err);
-                }
+                groupDB.users.forEach( user => {
+                    client.broadcast.to( user.idSession ).emit('renderGroupChat', groupDB );
+                } );
 
+                callback(groupDB);
+            })
+            
 
-            });
         } );
 
 
     })
 
+    //Crear chat privado
     client.on('renderChat', (data, callback) => {
         let id = data.id;
-
+        
         User.findById(id, (err, userDB) => {
             if(err){
                 throw new Error(err)
             }   
-
             callback(userDB);
         } );
     });
 
+    //Generar chat de grupo ya existenete
+    client.on('renderChatGroup', (data, callback) => {
+        id = data.id;
+
+        Group.findById(id, (err, groupDB) => {
+            if(err){
+                throw new Error(err)
+            }   
+            callback(groupDB);
+        } );
+    });
+
+    //Crear mensaje priavdo
     client.on('createMessage', (data, callback) => {
        let id = data.id;
 
@@ -97,6 +108,40 @@ io.on('connection', ( client ) => {
 
     });
 
+    //Crear mensaje de grupo
+    client.on('createMessageGroup', (data, callback) => {
+        Group.findById( data.id ).exec((err, groupDB) => {
+            if(err){
+                throw new Error(err);
+            }
+
+            User.findOne({ idSession: client.id }, (err, userDB) => {
+                if(err){
+                    throw new Error(err);
+                }
+
+                User.populate(groupDB, {path: 'users'}, (err, groupDB) => {
+
+                    groupDB.users.forEach(user => {
+                        client.broadcast.to(user.idSession).emit('createMessageGroup', { 
+                            user: userDB, 
+                            group: groupDB,
+                            message: data.message, 
+                            query: `chat_${groupDB.id}` 
+                        });
+                    });
+    
+                    callback({ user: userDB , message: data.message, });
+                })
+
+               
+
+            })
+
+        });
+    })
+
+    //Deconectar
     client.on('disconnect', () => {
         console.log('Se perdio coneccion con el usuario');
 

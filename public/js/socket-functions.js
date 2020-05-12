@@ -1,6 +1,7 @@
 function SocketImplement(){
     this.event = new SocketEvent;
     
+    //Generar lista de usuario en el header
     this.renderUsersList = function(data){
 
         var contentUsers = document.querySelector('#content_users');
@@ -8,13 +9,14 @@ function SocketImplement(){
     
         data.forEach( user => {
             contentUsers.innerHTML += '<button id= '+  user._id  + '>'+ user.email +'</button>';
-            this.event.eventUsersList(this);
+            this.event.eventUsersList();
 
         });
 
     }
 
-    this.renderChat = function(data){
+    //Crear chat
+    this.renderChat = function(data, type = 'private'){
 
         var contentChats = document.querySelector('#content_chats');
 
@@ -36,7 +38,7 @@ function SocketImplement(){
         button.setAttribute('type', 'submit');
         button.innerText = 'Enviar';
 
-        form.setAttribute('action', '/users/' + data._id);
+        form.setAttribute('action', '/' + data._id);
 
         divMessage.className = 'content_messages';
 
@@ -48,20 +50,70 @@ function SocketImplement(){
 
         contentChats.appendChild(divParent);
 
+        switch(type){
+            case 'private': 
+                this.event.eventCreateMessage(form);           
+            break;
 
-        this.event.eventCreateMessage(form, this);
+            case 'group':
+                this.event.eventCreateMessageGroup(form);
+            break;
+
+            default: 
+                console.log('No selecciono la opcion correcta');
+        }
+
 
     }
 
+    //Validar la existencia del chat de usuarios
+    this.validateChat = function(chat, data) {
+        var self = this;
+
+        if(!chat){
+            socket.emit('renderChat',  { id: data.user._id }, function(dataRender){
+                self.renderChat(dataRender);
+    
+                var chat = document.getElementById(data.query);
+                chat.children[1].innerHTML += self.createMessage(data);
+    
+            });
+        }
+        else{
+            chat.children[1].innerHTML += self.createMessage(data);
+        }
+    }
+    
+    //Validar la existencia del chat de grupo
+    this.validateChatGroup = function(chat, data) {
+        var self = this;
+
+        if(!chat){
+            socket.emit('renderChatGroup',  { id: data.group._id }, function(dataRender){
+                self.renderChat(dataRender);
+    
+                var chat = document.getElementById(data.query);
+                chat.children[1].innerHTML += self.createMessage(data);
+            });
+        }
+        else{
+            chat.children[1].innerHTML += self.createMessage(data);
+        }
+    }
+
+    //Crear mensaje
     this.createMessage = function(data){
         return '<div>' + data.user.name + ' - ' + data.message + '<div>';        
     }
 
 }
 
+var implement = new SocketImplement;
+
 function SocketEvent(){
 
-    this.eventUsersList = function(self){
+    //Evento que da accion a botones del header
+    this.eventUsersList = function(){
 
         var contentUsers = document.querySelector('#content_users');
 
@@ -71,7 +123,7 @@ function SocketEvent(){
                 e.preventDefault();
 
                 socket.emit('renderChat', { id: this.id }, function(data){
-                    self.renderChat(data);
+                    implement.renderChat(data);
                 });
             });
 
@@ -79,7 +131,8 @@ function SocketEvent(){
 
     }
 
-    this.eventCreateMessage = function(form, self){
+    //Evento que da accion a chat de usuarios
+    this.eventCreateMessage = function(form){
 
         form.addEventListener('submit', function(e){
             e.preventDefault();
@@ -88,17 +141,31 @@ function SocketEvent(){
             var that =  this;
             
             socket.emit('createMessage', { id: idUser, message: this.message.value }, function(data){
-                that.parentNode.children[1].innerHTML += self.createMessage(data);
+                that.parentNode.children[1].innerHTML += implement.createMessage(data);
             })
         });
 
     }
 
-    this.eventCreateGroupChat = function(form){
+    //Evento que da accion a chat de grupo
+    this.eventCreateMessageGroup = function(form){
+        form.addEventListener('submit', function(e){
+            e.preventDefault();
+
+            var idGroup = this.action.split('/')[this.action.split('/').length - 1];
+            var that = this;
+
+            socket.emit('createMessageGroup', { id: idGroup, message: this.message.value }, function(data){
+                that.parentNode.children[1].innerHTML += implement.createMessage(data);                
+            });
+        })
+    }
+
+    //Evento que da accion a formulario de creacion de grupo
+    this.eventRenderGroupChat = function(form){
 
         form.addEventListener('submit', function(e){
             e.preventDefault();
-            
             var userArr = [];
         
             for(var user of this.user){
@@ -108,9 +175,12 @@ function SocketEvent(){
                 }
         
             }
+
+            // console.log( userArr );
         
-            socket.emit('createGroupChat', { name: this.name.value, users: userArr }, function(data){
-                console.log(data);
+            socket.emit('renderGroupChat', { name: this.name.value, users: userArr }, function(data){
+                // console.log(data);
+                implement.renderChat(data, 'group');
             });
         })
 
