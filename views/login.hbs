@@ -1,6 +1,14 @@
-<h1>Iniciar secion</h1>
+
+<div id="app">
+    <hola-prro
+        v-for="name in names"
+        v-bind:name="name"
+    ></hola-prro>
+</div>
 
 <form action="/login" method="POST">
+    <h1>Iniciar secion</h1>
+
     <input type="email" name="email" placeholder="Ingresa en email">
     <input type="password" name="password" placeholder="Ingresa la contraseña">
     <button type="submit" > Ingresar </button>

@@ -1,5 +1,6 @@
 import Execute from './execute';
 import Auth from './components/authenticate';
+import Vue from 'vue';
 
 class AuthExecute extends Execute {
     constructor(pathname) {
@@ -14,12 +15,14 @@ class LoginAuthExecute extends AuthExecute {
     }
 
     execute(){
+
         const self = this;
 
         document.querySelector('form').addEventListener('submit', function(e){
             e.preventDefault();
             self.auth.login(this);
         });
+
     }
 }
 

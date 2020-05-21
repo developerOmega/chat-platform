@@ -1,16 +1,16 @@
 const express = require('express');
 const app = express();
 const bcrypt = require('bcrypt');
+const path = require('path');
+
 const { excludeSession, authSession } = require('../middlewares/authentication_session');
 
 const User = require('../models/user');
 
 
 app.get('/', excludeSession, (req, res) => {
-    res.render('login', {
-        name: 'Daniel',
-        title: 'Login'
-    })
+    let file = path.resolve(__dirname, '../../public/views/login.html')
+    res.sendFile(file);
 });
 
 app.post('/login', (req, res) => {
@@ -42,18 +42,21 @@ app.delete('/logout', function (req, res) {
 });
 
 app.get('/home', authSession, (req ,res) => {
-    User.find({status: true}).exec((err, usersDB) => {
+    // User.find({status: true}).exec((err, usersDB) => {
 
-        if(err){
-            throw new Error(err);
-        }
+    //     if(err){
+    //         throw new Error(err);
+    //     }
 
-        res.render('home', {
-            title: 'Home',
-            session: req.session,
-            users: usersDB
-        })
-    });
+    //     res.render('home', {
+    //         title: 'Home',
+    //         session: req.session,
+    //         users: usersDB
+    //     })
+    // });
+
+    let file = path.resolve(__dirname, '../../public/views/home.html')    
+    res.sendFile(file);
     
 });
 

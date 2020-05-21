@@ -1,5 +1,6 @@
-import { LoginAuthExecute, LogoutAuthExecute } from './auth_execute';
+import { LoginAuthExecute, LogoutAuthExecute } from './auth_execute'
 import { UserGetAllExecute } from './user_execute';
+import VueExecute from './vue_execute';
 
 
 if(window.location.pathname === '/'){
@@ -8,9 +9,12 @@ if(window.location.pathname === '/'){
 }
 
 if(window.location.pathname === '/home'){
+
+    let vue = new VueExecute('/');
+    vue.execute();
+
     let logout = new LogoutAuthExecute('/');
     logout.execute();
-
 
     let users = new UserGetAllExecute('/');
     users.execute();

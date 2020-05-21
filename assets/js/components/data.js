@@ -1,6 +1,6 @@
 export default class Data {
     constructor(url){
-        this.url = 'http://localhost:3000';
+        this.url = 'http://localhost:4000';
         this.token = !localStorage.getItem('tokenLogin') || localStorage.getItem('tokenLogin') == undefined ? '' : JSON.parse(localStorage.getItem('tokenLogin'));
     }
 
