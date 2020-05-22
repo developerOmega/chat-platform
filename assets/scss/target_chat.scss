@@ -1,0 +1,35 @@
+.target{
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+    padding: 10px 50px;
+    
+    .content_box{
+        padding: 3px;
+        background: #fff;
+
+        .header_taget{
+            font-size: 12.5px;
+        }
+        .message_target{
+            margin-top: 5px;  
+        }
+    }
+
+    &.me {
+        .content_box{
+            background: $backgroundMe;
+        }
+
+        .image{
+            padding-right: 0;
+            padding-left: 10px;
+            order: 1;
+        }
+
+        .content_box{
+            order: 0;
+        }
+    }
+}

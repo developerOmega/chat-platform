@@ -5,30 +5,34 @@
                 <h2>ChatPlatform</h2>
             </div>
             <div class="info">
-                <div class="options">
-                    <button v-on:click="deleteUser"> Crear sala </button>
-                    <form action="/logout?_method=DELETE" method="POST" id="logout_session">
-                        <button type="submit" > Cerrar secion </button>
-                    </form>
-                </div>
                 <div class="data">
-                    <div>{{ session.email }}</div>
+                    <div class="image width-50px">                    
+                        <img src="https://picsum.photos/200" alt="">
+                    </div>
+                    <div class="name">{{ session.email }}</div>
+                </div>
+                <div class="options">
+                    <button class="button hover-color" v-on:click="deleteUser"><i class="fas fa-comment-alt"></i> Crear sala </button>
+                    <form action="/logout?_method=DELETE" method="POST" id="logout_session">
+                        <button class="button hover-color-danger" type="submit" ><i class="fas fa-power-off"></i> Cerrar secion </button>
+                    </form>
                 </div>
                 
             </div>
         </header>
 
         <div class="container">
-            <nav>
+            <nav class="scroll min">
                 <NavUser
                     v-for="user in users"
                     v-bind:user="user"
                     v-bind:chats="chats"
                     v-bind:key="user.id"
                 />
+               
             </nav>
             
-            <div class="main">
+            <div class="main scroll max">
                 <Chat 
                     v-for="chat in chats"
                     v-bind:user="chat.chat"
@@ -102,12 +106,8 @@
                     });
                 }
                 else{
-                    // self.chats.messages.push(data);
                     let chat = self.chats.filter( chat => chat.query === data.query)[0];
-                    console.log(chat);
                     chat.messages.push(data);
-                    // console.log(data)
-                    // self.messages.push(data);
                 }
                
             });
@@ -124,3 +124,7 @@
         
     }
 </script>
+
+<style>
+   
+</style>

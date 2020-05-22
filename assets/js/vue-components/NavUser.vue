@@ -1,10 +1,13 @@
 <template>
                    
-    <button type="button" v-on:click="renderChat(user)"  class="card"> 
-        <div class='img'> <img v-bind:src="user.img">  </div>
+    <button type="button" v-on:click="renderChat(user)"  class="card button hover-background-00A2D6 background-tranparent"> 
+
+        <div class='image width-50px'> 
+            <img v-bind:src="user.img" src="https://picsum.photos/200">  
+        </div>
         <div class="info" > 
             <div> {{ user.name }} </div>
-            <div class='blur'> {{ user.email }} </div>
+            <div> {{ user.email }} </div>
         </div>
         <div class="icon"> 
             <i class="fas fa-comment-alt"></i>

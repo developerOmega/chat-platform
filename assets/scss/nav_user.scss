@@ -1,0 +1,25 @@
+nav{
+    display: flex;
+    flex-direction: column;
+    height: 92vh;
+    border-right: 1px solid $background; 
+    // background: $backgroundNav;
+    
+    button.card{
+        padding-left: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between; 
+        width: 100%;
+        border-bottom: 1px solid #fff;
+        .icon{
+            color: #fff;
+            background: $backgroundMessageCard;
+            padding : 30px 10px;
+        }
+
+    }    
+}
+
+
+

@@ -82,8 +82,8 @@ io.on('connection', ( client ) => {
 
     //Crear mensaje priavdo
     client.on('createMessage', (data, callback) => {
-        let id = data.id;
-        
+       let id = data.id;
+
         User.findOne( { idSession: client.id }, (err, userDB) => {
             
             if(err){

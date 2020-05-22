@@ -1,14 +1,16 @@
 <template>
-    <div class="chat" v-bind:id="query">
+    <div class="chat box box-shadow-patent" v-bind:id="query">
         <div class="header">
             <div class="info">
-                <img src="" alt="">
+                <div class="image width-30px">
+                    <img src="https://picsum.photos/200" alt="">
+                </div>
                 <div>{{ user.name }}</div>
             </div>
-            <button type="button"> <i class="fas fa-minus"></i> </button>
+            <button type="button"> <i class="fas fa-times"></i> </button>
         </div>
 
-        <div class="content">
+        <div class="content scroll min">
             <TargetChat
                 v-for="message in messages"
                 v-bind:message="message"
@@ -46,8 +48,9 @@
                 console.log(user);
                 let self = this;
                 Socket.emit('createMessage', { id: user._id, message: this.newMessage }, function(data){
+                    data.me = true;
                     self.messages.push(data);
-                   
+                    console.log('Tu mensaje es:', data)
                 })
             }
         },

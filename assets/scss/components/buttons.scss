@@ -1,0 +1,42 @@
+.button {
+    border: none;
+    transition: all .3s ease;
+    cursor: pointer;
+    background: $backgroundCards;
+    color: #fff;
+
+    &.background-tranparent{
+        background: #78BAD0;
+    }
+
+    &:hover{
+        transition: all .3s ease;
+    }
+
+    &.hover-color{
+        &:hover{
+            color: #aaaaaa;
+        }
+    }
+
+    &.hover-color-danger{
+        &:hover {
+            color: red;
+        }
+    }
+
+    &.hover-background{
+        &:hover{
+            background: $background;
+        }
+    }
+
+    &.hover-background-00A2D6{
+        &:hover{
+            background: $backgroundMessageCard;
+        }
+    }
+
+
+
+}

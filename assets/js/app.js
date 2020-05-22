@@ -1,3 +1,5 @@
+import '../scss/style.scss';
+
 import { LoginAuthExecute, LogoutAuthExecute } from './auth_execute'
 import { UserGetAllExecute } from './user_execute';
 import VueExecute from './vue_execute';
