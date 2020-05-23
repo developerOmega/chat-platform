@@ -1,4 +1,5 @@
-<template>
+<template> 
+
     <div class="chat box box-shadow-patent" v-bind:id="query">
         <div class="header">
             <div class="info">
@@ -7,7 +8,7 @@
                 </div>
                 <div>{{ user.name }}</div>
             </div>
-            <button type="button"> <i class="fas fa-times"></i> </button>
+            <button type="button" v-on:click="chatNone"> <i class="fas fa-times"></i> </button>
         </div>
 
         <div class="content scroll min">
@@ -48,10 +49,17 @@
                 console.log(user);
                 let self = this;
                 Socket.emit('createMessage', { id: user._id, message: this.newMessage }, function(data){
+                    
                     data.me = true;
                     self.messages.push(data);
-                    console.log('Tu mensaje es:', data)
+                    console.log('Tu mensaje es:', data);
+
                 })
+            },
+
+            chatNone(){
+                let selfChat = document.querySelector(`#${this.query}`);
+                selfChat.className += ' none';
             }
         },
         mounted(){

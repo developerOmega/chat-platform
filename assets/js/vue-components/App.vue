@@ -106,8 +106,10 @@
                     });
                 }
                 else{
-                    let chat = self.chats.filter( chat => chat.query === data.query)[0];
-                    chat.messages.push(data);
+                    chat.className = 'chat box box-shadow-patent';
+
+                    let chatData = self.chats.filter( chat => chat.query === data.query)[0];
+                    chatData.messages.push(data);
                 }
                
             });

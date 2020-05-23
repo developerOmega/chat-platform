@@ -27,11 +27,16 @@ $colorDanger: red;
     color: #AAAAAA;
 }
 
+.none{
+    display: none !important;
+}
+
 @import './components/images.scss';
 @import './components/box.scss';
 @import './components/buttons.scss';
 @import './components/scroll.scss';
 
+@import './login.scss';
 @import './header.scss';
 @import './nav_user.scss';
 @import './chat.scss';

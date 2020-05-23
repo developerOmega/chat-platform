@@ -30,7 +30,15 @@
                 let self = this;
 
                 Socket.emit('renderChat', { id: user._id }, function(data){
-                    self.chats.push({chat: data, messages: [], query: `chat_${data._id}`});
+                    const query = `chat_${data._id}`;
+                    const chat = document.querySelector(`#${query}`);
+
+                    if(chat){
+                        chat.className = 'chat box box-shadow-patent';
+                    }
+                    else{
+                        self.chats.push({chat: data, messages: [], query});
+                    }
                 });
 
             },
