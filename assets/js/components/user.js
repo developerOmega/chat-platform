@@ -6,7 +6,7 @@ export default class User extends Data {
     }
 
     get(id = 'all', callback){
-        let urlData = id === 'all' ? `${ this.url }/api/v1/users` : `${ this.url }/api/v1/users/${id}` ;
+        let urlData =  `${ this.url }/api/v1/users`;
         let h = new Headers;
         h.append('Authorization', this.token);
 

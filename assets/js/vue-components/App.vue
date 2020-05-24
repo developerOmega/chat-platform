@@ -1,5 +1,10 @@
 <template>
     <div id="app">
+        <FormChatRoom
+            v-if="users"
+            v-bind:usersData="users"
+        />
+    
         <header>
             <div class="logo">
                 <h2>ChatPlatform</h2>
@@ -12,7 +17,7 @@
                     <div class="name">{{ session.email }}</div>
                 </div>
                 <div class="options">
-                    <button class="button hover-color" v-on:click="deleteUser"><i class="fas fa-comment-alt"></i> Crear sala </button>
+                    <button class="button hover-color" v-on:click="createChatRoom"><i class="fas fa-comment-alt"></i> Crear sala </button>
                     <form action="/logout?_method=DELETE" method="POST" id="logout_session">
                         <button class="button hover-color-danger" type="submit" ><i class="fas fa-power-off"></i> Cerrar secion </button>
                     </form>
@@ -42,6 +47,8 @@
                 />
             </div>
         </div>
+
+
     </div>
 </template>
 
@@ -49,6 +56,7 @@
 
     import NavUser from './NavUser.vue';
     import Chat from './Chat.vue';
+    import FormChatRoom from './FormChatRoom.vue';
     import { Socket } from './implemets/event_socket.js';
     
     let userAuth = !localStorage.getItem('userAuth') || localStorage.getItem('userAuth') == undefined ? '' : JSON.parse(localStorage.getItem('userAuth'));
@@ -57,7 +65,8 @@
         name: 'App',
         components: {
             NavUser,
-            Chat
+            Chat,
+            FormChatRoom
         },
         data() {
             return {
