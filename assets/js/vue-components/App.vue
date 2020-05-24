@@ -1,9 +1,5 @@
 <template>
     <div id="app">
-        <FormChatRoom
-            v-if="users"
-            v-bind:usersData="users"
-        />
     
         <header>
             <div class="logo">
@@ -17,10 +13,25 @@
                     <div class="name">{{ session.email }}</div>
                 </div>
                 <div class="options">
-                    <button class="button hover-color" v-on:click="createChatRoom"><i class="fas fa-comment-alt"></i> Crear sala </button>
+                    <button class="button hover-background-00A2D6" id="button-chat-room" v-on:click="createChatRoom"><i class="fas fa-comment-alt"></i> Crear sala </button>
                     <form action="/logout?_method=DELETE" method="POST" id="logout_session">
                         <button class="button hover-color-danger" type="submit" ><i class="fas fa-power-off"></i> Cerrar secion </button>
                     </form>
+                    
+                    <transition
+                        v-on:before-enter="beforeEnter"
+                        v-on:enter="enter"
+                        v-on:leave="leave"
+                        v-bind:css="false"
+                    >
+                       <FormChatRoom
+                        v-if="formOn" 
+                        v-bind:usersData="users"
+                        v-bind:formOn="formOn"
+                        v-bind:chats="chats"
+                        /> 
+                    </transition>
+                    
                 </div>
                 
             </div>
@@ -40,9 +51,10 @@
             <div class="main scroll max">
                 <Chat 
                     v-for="chat in chats"
-                    v-bind:user="chat.chat"
+                    v-bind:data="chat.chat"
                     v-bind:messages="chat.messages"
                     v-bind:query="chat.query"
+                    v-bind:type="chat.type"
                     v-bind:key="chat.id"
                 />
             </div>
@@ -74,12 +86,30 @@
                 session: userAuth,
                 users: [],
                 chats: [],
-                message: {}
+                message: {},
+                formOn: false
             }
         },
         methods:{
-            deleteUser(){
+            createChatRoom(){
+                if(this.formOn ==  false){
+                    this.formOn = true;
+                    document.getElementById('button-chat-room').className += " select";
+                }
+                else{
+                    this.formOn = false;
+                    document.getElementById('button-chat-room').className = "button hover-background-00A2D6";                    
+                }
             },
+            beforeEnter: function (el) {
+                el.style.opacity = 0
+            },
+            enter: function (el, done) {
+                Velocity(el, { opacity: 1, fontSize: '1em' }, { duration: 300 }, { complete: done })
+            },
+            leave: function (el, done) {
+                Velocity(el, {opacity: 0, display: 'none'},  { complete: done });
+            }
         },
         created(){
             self = this;
@@ -108,7 +138,8 @@
                         let op = {
                             chat: dataRender,
                             messages: [data],
-                            query: data.query
+                            query: data.query,
+                            type: 'private'
                         }
                         self.chats.push(op);
                         self.message = data;
@@ -123,6 +154,29 @@
                
             });
 
+            Socket.on('createMessageGroup', function(data){
+                let chat = document.getElementById(data.query);
+
+                if(!chat){
+                    Socket.emit('renderChatGroup',  { id: data.group._id }, function(dataRender){
+                        let op = {
+                            chat: dataRender,
+                            messages: [data],
+                            query: data.query,
+                            type: 'group'
+                        }
+                        self.chats.push(op);
+                        self.message = data;
+                    });
+                }
+                else{
+                    chat.className = 'chat box box-shadow-patent';
+
+                    let chatData = self.chats.filter( chat => chat.query === data.query)[0];
+                    chatData.messages.push(data);
+                }
+            });
+
             Socket.on('renderChat', function(data){
                 console.log(this.chats);
                 self.chats.push({chat: data, messages: []});
@@ -132,6 +186,11 @@
                 console.log('Se perdio la coneccion');
             });
         },
+        mounted(){
+            this.$root.$on('createChatRoom', ()=>{
+                this.createChatRoom();
+            })
+        }
         
     }
 </script>

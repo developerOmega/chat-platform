@@ -3,7 +3,11 @@
 .grid{
     display: grid !important;
     height:450px; 
-    grid-template-rows: 80px 80px auto 80px;
+    grid-template-rows: 80px 80px auto 70px;
+
+    button[type="submit"]{
+        height: 6vh !important;
+    }
     
     .box{
         border-radius: 5px;
@@ -24,6 +28,8 @@
             align-items: center;
             transition: none;
             margin: 5px 0;
+            padding: 10px 0 !important;
+
 
             .image{
                 img{
@@ -47,4 +53,10 @@
 
 .border-radius-none{
     border-radius: 0 !important;
+}
+
+.position-absolute{
+    position: absolute;
+    top:8vh;
+    right: 17vh;
 }

@@ -15,7 +15,14 @@ $backgroundScroll: #0187B2;
 
 $color: #00A2D6;
 $colorDanger: red;
+$colorOk: #63FF4B;
 
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+}
 
 .container{
     width: 100%;
@@ -29,6 +36,10 @@ $colorDanger: red;
 
 .none{
     display: none !important;
+}
+
+.select{
+    background: $backgroundMessageCard !important;
 }
 
 @import './components/images.scss';

@@ -37,7 +37,7 @@
                         chat.className = 'chat box box-shadow-patent';
                     }
                     else{
-                        self.chats.push({chat: data, messages: [], query});
+                        self.chats.push({chat: data, messages: [], query, type: 'private'});
                     }
                 });
 

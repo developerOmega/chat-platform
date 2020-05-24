@@ -6,7 +6,7 @@
                 <div class="image width-30px">
                     <img src="https://picsum.photos/200" alt="">
                 </div>
-                <div>{{ user.name }}</div>
+                <div>{{ data.name }}</div>
             </div>
             <button type="button" v-on:click="chatNone"> <i class="fas fa-times"></i> </button>
         </div>
@@ -19,7 +19,7 @@
             />
         </div>
 
-        <form class="text_area" v-on:submit.prevent="createMessage(user)">
+        <form class="text_area" v-on:submit.prevent="createMessage(data)">
             <input type="text" v-model="newMessage" placeholder="Escribe tu mensaje ... ">
         </form>
 
@@ -35,9 +35,10 @@
         name: 'Chat',
         components: { TargetChat },
         props: {
-            user: Object,
+            data: Object,
             messages: Array,
-            query: String
+            query: String,
+            type: String
         },
         data() {
             return {
@@ -45,16 +46,30 @@
             }
         },
         methods: {
-            createMessage(user){
-                console.log(user);
+            createMessage(data){
+                // console.log(data);
                 let self = this;
-                Socket.emit('createMessage', { id: user._id, message: this.newMessage }, function(data){
-                    
-                    data.me = true;
-                    self.messages.push(data);
-                    console.log('Tu mensaje es:', data);
 
-                })
+                switch(this.type){
+                    case 'private': 
+                        Socket.emit('createMessage', { id: data._id, message: this.newMessage }, function(data){
+                            data.me = true;
+                            self.messages.push(data);
+                        })
+                    break;
+
+                    case 'group':
+                        Socket.emit('createMessageGroup', { id: data._id, message: this.newMessage }, function(data){
+                            data.me = true;
+                            self.messages.push(data);
+
+                        })
+                    break;
+
+                    default: 
+                        console.error("La opcion no existe");
+                }
+              
             },
 
             chatNone(){

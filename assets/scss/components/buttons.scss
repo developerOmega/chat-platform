@@ -25,6 +25,13 @@
         }
     }
 
+    &.hover-color-ok{
+        &:hover{
+            color: $colorOk;
+        }
+    }
+
+
     &.hover-background{
         &:hover{
             background: $background;
@@ -36,7 +43,6 @@
             background: $backgroundMessageCard;
         }
     }
-
 
 
 }
