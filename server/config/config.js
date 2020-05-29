@@ -7,7 +7,7 @@ process.env.PORT = process.env.PORT || 4000;
 //==========================
 // Entorno'
 //==========================
-process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
+process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 
 //==========================
@@ -27,7 +27,7 @@ process.env.SEED = 'el-gato-esta-en-desarrollo';
 //==========================
 let urlDB;
 
-if(process.env.NODE_ENV === 'dev'){
+if(process.env.NODE_ENV === 'development'){
     urlDB = 'mongodb://localhost:27018/chat_platform'
 }
 else{

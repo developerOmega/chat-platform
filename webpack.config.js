@@ -1,5 +1,6 @@
 const path = require('path');
-const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+require('./server/config/config');
 
 module.exports = {
   entry: './assets/js/app.js',
@@ -24,5 +25,5 @@ module.exports = {
     // make sure to include the plugin!
     new VueLoaderPlugin()
   ],
-  mode: 'development'
+  mode: process.env.NODE_ENV
 };
